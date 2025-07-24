@@ -1,53 +1,43 @@
 {% set version = "0.1.0" %}
-{% set build_number = 1 %}
+{% set name = "pywin32-on-windows" %}
+
 
 package:
-  name: pywin32-on-windows
+  name: {{ name|lower }}
   version: {{ version }}
 
 build:
-  noarch: python
-  {% if pkg_type == 'pywin32' %}
-  number: {{ build_number | int * 2 }}
-  {% else %}
-  number: {{ build_number | int * 2 + 1 }}
-  {% endif %}
+  number: 0
+  skip: True  # [not win]
 
 requirements:
   host:
-    - python >=2.7
+    - python
   run:
-    - python >=2.7
-    {% if pkg_type == 'pywin32' %}
+    - python
     - pywin32
-    {% else %}
-    - __unix
-    {% endif %}
 
 test:
-  {% if pkg_type == 'pywin32' %}
   imports:
     - win32api
-  {% endif %}
   requires:
     - pip
   commands:
     - pip check
 
 about:
-  home: https://github.com/conda-forge/pywin32-on-windows-feedstock
+  home: https://github.com/mhammond/pywin32
+  doc_url: https://github.com/mhammond/pywin32
+  dev_url: https://github.com/mhammond/pywin32
   license: BSD-3-Clause
   license_family: BSD
   license_file: LICENSE.txt
   summary: 'A virtual package for pywin32... but only on windows'
-  description: |-
+  description: |
     This package exists so other packages can depend on `pywin32`, often the only
     platform specific dependency, while remaining `noarch: python`. On non-Windows
     platforms, installing it is a no-op.
-
-    A specific version constraint for `pywin32` itself can be specified at build
-    time with `run_constrained`.
-
 extra:
   recipe-maintainers:
     - bollwyvl
+    - Arishamays1
